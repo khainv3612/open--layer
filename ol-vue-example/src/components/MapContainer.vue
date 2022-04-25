@@ -11,7 +11,7 @@ import TileLayer from 'ol/layer/Tile'
 import OSM from 'ol/source/OSM'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import GeoJSON from 'ol/format/GeoJSON'
+// import GeoJSON from 'ol/format/GeoJSON'
 
 import 'ol/ol.css'
 import { transform } from "ol/proj";
@@ -31,7 +31,7 @@ export default {
       olMap: null,
       vectorLayer: null,
       selectedFeature: null,
-      iconFeature: null
+      iconFeature: null,
     }
   },
   mounted() {
@@ -49,9 +49,12 @@ export default {
             src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg",
           })
         })),
+
+
         this.vectorLayer = new VectorLayer({
           source: new VectorSource({
-            features: [this.iconFeature],
+            // features: [this.iconFeature, this.iconFeature1],
+            features: [],
           })
         }),
 
@@ -92,15 +95,10 @@ export default {
       const view = this.olMap.getView();
       const source = this.vectorLayer.getSource();
       for (let i = 0; i < geojson.length; i++) {
-        const features = new GeoJSON({
-          featureProjection: 'EPSG:3857',
-        }).readFeatures(geojson[i]);
-        console.log(geojson[i].feature)
-        // source.clear();
-        source.addFeatures(features);
-
+        source.addFeature(geojson[i].feature);
         view.fit(source.getExtent())
       }
+
     }
   }
 }
